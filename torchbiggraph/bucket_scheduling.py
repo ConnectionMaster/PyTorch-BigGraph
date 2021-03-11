@@ -91,9 +91,7 @@ def create_ordered_buckets(
 def create_buckets_ordered_lexicographically(
     nparts_lhs: int, nparts_rhs: int
 ) -> List[Bucket]:
-    """Return buckets in increasing LHS and, for the same LHS, in increasing RHS
-
-    """
+    """Return buckets in increasing LHS and, for the same LHS, in increasing RHS"""
     buckets = [
         Bucket(lhs, rhs) for lhs in range(nparts_lhs) for rhs in range(nparts_rhs)
     ]
@@ -180,7 +178,7 @@ def create_buckets_ordered_by_affinity(
         same_as_lhs = buckets_per_partition[b.lhs]
         same_as_rhs = buckets_per_partition[b.rhs]
         while len(same_as_lhs) > 0 or len(same_as_rhs) > 0:
-            chosen, = generator.choices(
+            (chosen,) = generator.choices(
                 [same_as_lhs, same_as_rhs], weights=[len(same_as_lhs), len(same_as_rhs)]
             )
             next_b = chosen.pop()
@@ -539,7 +537,7 @@ class LockServer(Server, Startable):
         logger.info(
             f"Bucket {new_bucket} acquired by trainer {rank}: active= {self.active}"
         )
-        return new_bucket, remaining
+        return new_bucket, remaining - 1
 
     def release_bucket(self, bucket: Bucket, stats: BucketStats) -> None:
         """

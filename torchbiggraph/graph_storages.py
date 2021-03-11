@@ -127,7 +127,12 @@ class AbstractEdgeStorage(ABC):
 
     @abstractmethod
     def load_chunk_of_edges(
-        self, lhs_p: Partition, rhs_p: Partition, chunk_idx: int, num_chunks: int
+        self,
+        lhs_p: Partition,
+        rhs_p: Partition,
+        chunk_idx: int,
+        num_chunks: int,
+        shared: bool,
     ) -> EdgeList:
         pass
 
@@ -291,7 +296,7 @@ class BufferedDataset:
         self.buffer_offset = 0
 
     def append(self, tensor: torch.Tensor) -> None:
-        tensor_size, = tensor.shape
+        (tensor_size,) = tensor.shape
         tensor_offset = 0
         while True:
             tensor_left = tensor_size - tensor_offset
